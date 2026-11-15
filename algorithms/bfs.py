@@ -1,4 +1,5 @@
 from collections import deque
+import time
 from typing import Dict, Optional, Set
 from models import Maze, Point, SearchResult, get_neighbors
 from algorithms.base import reconstruct_path
@@ -10,6 +11,7 @@ def bfs(maze: Maze) -> SearchResult:
     Działa falami, używając kolejki FIFO (First-In, First-Out).
     Zawsze znajduje najkrótszą ścieżkę, gdy koszt każdego kroku jest taki sam.
     """
+    start_time = time.perf_counter()
     # deque to kolejka dwukierunkowa, która pozwala usuwać elementy z początku (popleft) w czasie stałym O(1).
     # Zwykła lista przy pop(0) musiałaby przesuwać wszystkie pozostałe elementy w pamięci.
     queue: deque[Point] = deque([maze.start])
@@ -37,5 +39,6 @@ def bfs(maze: Maze) -> SearchResult:
                 queue.append(neighbor)          # Dokładamy sąsiada na koniec kolejki do późniejszego sprawdzenia
 
     # Odtwarzamy ostateczną trasę od S do G na podstawie zapamiętanej mapy rodziców
+    elapsed_ms = (time.perf_counter() - start_time) * 1000.0
     path = reconstruct_path(parent_map, maze.start, maze.goal)
-    return SearchResult(algorithm_name="BFS", path=path, visited=visited)
+    return SearchResult(algorithm_name="BFS", path=path, visited=visited, execution_time_ms=elapsed_ms)

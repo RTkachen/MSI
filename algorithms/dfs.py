@@ -1,4 +1,5 @@
 from typing import Dict, List, Optional, Set
+import time
 from models import Maze, Point, SearchResult, get_neighbors
 from algorithms.base import reconstruct_path
 
@@ -10,6 +11,7 @@ def dfs(maze: Maze) -> SearchResult:
     Drąży jedną wybraną ścieżkę do końca, zanim cofnie się do skrzyżowania.
     Nie gwarantuje znalezienia najkrótszej drogi.
     """
+    start_time = time.perf_counter()
     # Zwykła lista idealnie sprawdza się jako stos LIFO, ponieważ dodawanie na koniec (append)
     # oraz zdejmowanie z końca (pop) działają w czasie stałym O(1) bez przesuwania pamięci.
     stack: List[Point] = [maze.start]
@@ -35,5 +37,6 @@ def dfs(maze: Maze) -> SearchResult:
                 parent_map[neighbor] = current
                 stack.append(neighbor)
 
+    elapsed_ms = (time.perf_counter() - start_time) * 1000.0
     path = reconstruct_path(parent_map, maze.start, maze.goal)
-    return SearchResult(algorithm_name="DFS", path=path, visited=visited)
+    return SearchResult(algorithm_name="DFS", path=path, visited=visited, execution_time_ms=elapsed_ms)

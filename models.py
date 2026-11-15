@@ -38,6 +38,7 @@ class SearchResult:
     algorithm_name: str  # Nazwa algorytmu (np. 'BFS' lub 'DFS') używana przy wypisywaniu statystyk
     path: List[Point]    # Uporządkowana lista punktów tworzących ścieżkę od S do G (pusta, gdy brak drogi)
     visited: Set[Point]  # Zbiór (set) wszystkich unikalnych pól odwiedzonych podczas działania algorytmu
+    execution_time_ms: float = 0.0  # Czas wykonania algorytmu w milisekundach [ms]
 
     @property
     def found(self) -> bool:
